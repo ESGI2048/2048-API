@@ -4,8 +4,8 @@
 module.exports = (sequelize, DataTypes) => {
     const Code = sequelize.define('Code',{
         code : {type : DataTypes.STRING, allowNull: false, unique: true },
-        creationDate : {type: DataTypes.DATE, allowNull : false} ,
-        expirationDate : {type: DataTypes.DATE, allowNull : false} ,
+        creation_date : {type: DataTypes.DATE, allowNull : false} ,
+        expiration_date : {type: DataTypes.DATE, allowNull : false} ,
         description : {type: DataTypes.STRING, allowNull : false, unique: true}
     },{
         tableName : 'Code',

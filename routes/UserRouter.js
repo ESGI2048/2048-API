@@ -7,35 +7,41 @@ class UserRouter {
                 router.get('/', async (req, res) => {
                     try {
                         const result = await UserController.getAll();
-                        res.status(200);
-                        res.json(result);
+			if(result == null) {
+				res.status(204).end();
+			}else {
+				res.status(200);
+                        	res.json(result).end();
+			}
                     }catch(err) {
                         res.status(409);
-                        res.json({error: "The getAll method failed"});
+                        res.json({error: "The getAll method failed"}).end();
                     }
-                    res.end();
-                        });
+                });
 
                 router.get('/:id', async (req, res) => {
                     try {
                         const result = await UserController.getOne(req.params.id);
-                        res.status(200);
-                        res.json(result);
+			if(result == null) {
+				res.status(204).end();
+			}else {
+                        	res.status(200);
+                        	res.json(result).end();
+			}
                     }catch(err) {
                         res.status(409);
-                        res.json({error: "The getOne method failed"});
+                        res.json({error: "The getOne method failed"}).end();
                     }
-                    res.end();
                     });
 
                 router.post('/', async(req, res) => {
                     try{
-                        const result = await UserController.addUser(req.body.firstName, req.body.lastName, req.body.login, req.body.password, req.body.email, req.body.score, req.body.phone) ;
-                        res.status(200);
+                        const result = await UserController.addUser(req.body.first_name, req.body.last_name, req.body.login, req.body.password, req.body.email, req.body.score, req.body.phone) ;
+                        res.status(201);
                         res.json(result);
                     } catch(err){
                         res.status(409);
-                        res.json({error: "The addUser method failed"});
+                        res.json({error: `The addUser method failed --> ${err}`});
                     }
                 });
 
@@ -44,7 +50,7 @@ class UserRouter {
                         const id = parseInt(req.params.id, 10);
                         if (typeof id === 'number' && !isNaN(id)) {
 
-                            const newData = await  UserController.prepareUpdate(req.body.firstName, req.body.lastName, req.body.login, req.body.password, req.body.email, req.body.score, req.body.phone);
+                            const newData = await  UserController.prepareUpdate(req.body.first_name, req.body.last_name, req.body.login, req.body.password, req.body.email, req.body.score, req.body.phone);
                             const result = await UserController.updateUser(req.params.id, newData);
                             res.status(200);
                             res.json(result);
