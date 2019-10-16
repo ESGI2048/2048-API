@@ -8,6 +8,7 @@ const ComponentRouter = router.ComponentRouter;
 const EventRouter = router.EventRouter;
 const CodeRouter = router.CodeRouter;
 const UserRouter = router.UserRouter;
+const AuthenticationRouter = router.AuthenticationRouter;
 
 class RouterBuilder {
 	constructor() {
@@ -48,6 +49,12 @@ class RouterBuilder {
 			const userRoutes = new UserRouter();
 			userRoutes.setRoutes(router);
 		}
+		else if(routeToLoad == 'authentication') {
+		const userRoutes = new AuthenticationRouter();
+		userRoutes.setRoutes(router);
+}
+
+
 		
 
 		return router;
