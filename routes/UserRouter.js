@@ -1,10 +1,18 @@
 'use strict'
+const controllers = require('../controllers');
+const UserController = controllers.User;
 
 class UserRouter {
         setRoutes(router) {
-                router.get('/', (req, res, next) => {
-                        res.status(200);
-                        res.json({users : [ {name: "name1", email: "test@test.fr"}, {title: "name2", content: "test2@test.fr"}]});
+                router.get('/', async (req, res, next) => {
+			try {
+				const result = await UserController.getAll();
+                        	res.status(200);
+				res.json(result);
+			}catch(err) {
+				res.status(409);
+				res.json({error: "The getAll method failed"});
+			}
                         res.end();
                 });
 
