@@ -9,10 +9,11 @@ module.exports = (sequelize, DataTypes) => {
         description : {type: DataTypes.STRING, allowNull : false, unique: true}
     },{
         tableName : 'Code',
-        paranoid : true,
+        paranoid : false,
+        timestamps: false,
         underscored: true,
         freezeTableName: true,
-        version: true,
+        version: false,
     });
     return Code;
 };

@@ -9,10 +9,11 @@ module.exports = (sequelize, DataTypes) => {
         value : {type: DataTypes.INTEGER, allowNull : false, unique: true}
     },{
         tableName : 'Component',
-        paranoid : true,
+        paranoid : false,
+        timestamps: false,
         underscored: true,
         freezeTableName: true,
-        version: true,
+        version: false,
     });
     return Component;
 };
