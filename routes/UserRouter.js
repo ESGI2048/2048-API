@@ -29,23 +29,45 @@ class UserRouter {
                     });
 
                 router.post('/', async(req, res) => {
-                    //try{
-                        console.log(req.body.email);
+                    try{
                         const result = await UserController.addUser(req.body.firstName, req.body.lastName, req.body.login, req.body.password, req.body.email, req.body.score, req.body.phone) ;
                         res.status(200);
                         res.json(result);
-                    /*} catch(err){
+                    } catch(err){
                         res.status(409);
                         res.json({error: "The addUser method failed"});
-                    }*/
+                    }
                 });
 
-                router.put('/:id', (req, res, next) => {
-                        res.status(200).end();
+                router.put('/:id', async (req, res) => {
+                    try {
+                        const id = parseInt(req.params.id, 10);
+                        if (typeof id === 'number' && !isNaN(id)) {
+
+                            const newData = await  UserController.prepareUpdate(req.body.firstName, req.body.lastName, req.body.login, req.body.password, req.body.email, req.body.score, req.body.phone);
+                            const result = await UserController.updateUser(req.params.id, newData);
+                            res.status(200);
+                            res.json(result);
+                        }
+
+                    } catch (err) {
+                        error(err, res);
+                    }
                 });
 
-                router.delete('/:id', (req, res, next) => {
-                        res.status(200).end();
+                router.delete('/:id', async (req, res) => {
+                    const id = parseInt(req.params.id, 10) ;
+                    if(typeof id === 'number' && !isNaN(id) ){
+                        const result = await UserController.deleteUserById(id) ;
+
+                        if(result){
+                            return res.json({message : 'Success'}) ;
+                        }
+                        else{
+                            return res.status(409).json({message : 'delete failed ' + result}) ;
+                        }
+                    }
+                    return res.status(409).json({message : 'delete failed , ' + req.params.id + 'is not a number ' }) ;
                 });
         }
 }
