@@ -7,10 +7,11 @@ module.exports = (sequelize, DataTypes) => {
         Content : {type : DataTypes.STRING, allowNull: false}
     },{
         tableName : 'Notification',
-        paranoid : true,
+        paranoid : false,
+        timestamps : false,
         underscored: true,
         freezeTableName: true,
-        version: true,
+        version: false,
     });
     return Notification;
 };

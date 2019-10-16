@@ -33,10 +33,11 @@ module.exports = (sequelize, DataTypes) => {
         }
     },{
         tableName : 'User',
-        paranoid : true,
+        paranoid : false,
+        timestamps : false,
         underscored: true,
         freezeTableName: true,
-        version: true,
+        version: false,
     });
     return User;
 };

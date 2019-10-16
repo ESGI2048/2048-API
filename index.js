@@ -11,7 +11,7 @@ const app = express();
 model.sequelize.authenticate()
     .then(() => {
         console.log('Connected !') ;
-        return model.sequelize.sync({ force : false}); // force : if true will drop the table first and re-create it afterwards
+        return model.sequelize.sync({ force : true}); // force : if true will drop the table first and re-create it afterwards
 
     })
     .catch( (err) => {
