@@ -2,7 +2,6 @@
 
 const express = require('express');
 const bodyParser = require('body-parser');
-const morgan = require('morgan'); 
 const dotenv = require('dotenv');
 const model = require('./models');
 
@@ -12,6 +11,7 @@ const router = new RouterBuilder();
 dotenv.config();
 
 const app = express();
+
 
 app.use(function(req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*')

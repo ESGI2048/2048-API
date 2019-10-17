@@ -6,6 +6,7 @@ module.exports = {
 	EventRouter: require('./EventRouter.js'),
 	CodeRouter: require('./CodeRouter.js'),
 	UserRouter: require('./UserRouter.js'),
-	AuthenticationRouter: require('./AuthenticationRouter.js')
+	AuthenticationRouter: require('./AuthenticationRouter.js'),
+	ResourceRouter: require('./ResourceRouter.js')
 	
 };
