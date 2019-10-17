@@ -6,7 +6,7 @@ const AuthenticationController = controllers.AuthenticationController;
 class AuthenticationRouter{
 
     setRoutes(router){
-        router.get('/:login', async (req, res) => {
+        /*router.post('/:login', async (req, res) => {
             try {
                 const result = await AuthenticationController.getUserByLogin(req.params.login);
                 res.status(200);
@@ -16,7 +16,7 @@ class AuthenticationRouter{
                 res.json({error: "The getUserByLogin method failed"});
             }
             res.end();
-        });
+        });*/
     }
 }
 

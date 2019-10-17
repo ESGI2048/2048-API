@@ -1,7 +1,7 @@
 'use strict' ;
 
 
-
+const bcrypt = require("bcrypt-nodejs");
 
 module.exports = (sequelize, DataTypes) => {
     const User = sequelize.define('User',{
@@ -31,6 +31,14 @@ module.exports = (sequelize, DataTypes) => {
         underscored: true,
         freezeTableName: true,
         version: false,
+    });
+
+    User.prototype.validPassword = function(password) {
+        return bcrypt.compareSync(password, this.password);
+    };
+
+    User.beforeCreate( function(user) {
+        user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10), null);
     });
     return User;
 };

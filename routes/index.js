@@ -9,15 +9,18 @@ const EventRouter = router.EventRouter;
 const CodeRouter = router.CodeRouter;
 const UserRouter = router.UserRouter;
 const AuthenticationRouter = router.AuthenticationRouter;
+const SignUpRouter = router.SignUpRouter;
+const LoginRouter = router.LoginRouter;
+
 
 class RouterBuilder {
 	constructor() {
-		this.listRoutes = ["notification", "component", "event", "code", "authentication", "user"];
+		this.listRoutes = ["notification", "component", "event", "code", "authentication", "user", "login", "signup"];
 	}
 
-	generateRoutes(app) {
+	generateRoutes(app, passport) {
 		this.listRoutes.forEach((route) => {
-			app.use('/' + route, this.routerTemplate(route));
+			app.use('/' + route, this.routerTemplate(route, passport));
 		}); 
 		app.all('*', (req, res, next) => {
 			res.status(404);
@@ -25,7 +28,7 @@ class RouterBuilder {
 		});
 	}
 
-	routerTemplate(routeToLoad) {
+	routerTemplate(routeToLoad, passport) {
 		const router = express.Router();
 		router.use(bodyParser.json());
 
@@ -50,9 +53,17 @@ class RouterBuilder {
 			userRoutes.setRoutes(router);
 		}
 		else if(routeToLoad == 'authentication') {
-		const userRoutes = new AuthenticationRouter();
-		userRoutes.setRoutes(router);
-}
+			const userRoutes = new AuthenticationRouter();
+			userRoutes.setRoutes(router);
+		}
+		else if(routeToLoad == 'signup') {
+			const signupRoutes = new SignUpRouter();
+			signupRoutes.setRoutes(router);
+		}
+		else if(routeToLoad == 'login') {
+			const loginRouter = new LoginRouter();
+			loginRouter.setRoutes(router, passport);
+		}
 
 
 		
