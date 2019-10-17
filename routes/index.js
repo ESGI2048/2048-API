@@ -21,7 +21,7 @@ class RouterBuilder {
 		}); 
 		app.all('*', (req, res, next) => {
 			res.status(404);
-			res.json({message: "Page note found"});
+			res.json({message: "Page not found"});
 		});
 	}
 

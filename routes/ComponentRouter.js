@@ -1,5 +1,7 @@
 'use strict'
 
+const authMiddleware = require('../middlewares/AdminAuth.js')
+
 class ComponentRouter {
         setRoutes(router) {
                 router.get('/', (req, res, next) => {
@@ -14,17 +16,17 @@ class ComponentRouter {
                         res.end();
                 });
 
-                router.post('/', (req, res, next) => {
+                router.post('/', authMiddleware.verifyBasicAuth, (req, res, next) => {
                         res.status(201);
                         res.json({message: "creation du composant"});
                         res.end();
                 });
 
-                router.put('/:id', (req, res, next) => {
+                router.put('/:id', authMiddleware.verifyBasicAuth, (req, res, next) => {
                         res.status(200).end();
                 });
 
-                router.delete('/:id', (req, res, next) => {
+                router.delete('/:id', authMiddleware.verifyBasicAuth, (req, res, next) => {
                         res.status(200).end();
                 });
         }
