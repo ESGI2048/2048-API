@@ -9,14 +9,14 @@ class UserRouter {
                     try {
                         const result = await UserController.getAll();
 			if(result == null) {
-				res.status(204).end();
+				res.status(404).end();
 			}else {
 				res.status(200);
                         	res.json(result).end();
 			}
                     }catch(err) {
-                        res.status(409);
-                        res.json({error: "The getAll method failed"}).end();
+                        res.status(500);
+                        res.json({message: "The getAll method failed"}).end();
                     }
                 });
 
@@ -24,14 +24,14 @@ class UserRouter {
                     try {
                         const result = await UserController.getOne(req.params.id);
 			if(result == null) {
-				res.status(204).end();
+				res.status(404).end();
 			}else {
                         	res.status(200);
                         	res.json(result).end();
 			}
                     }catch(err) {
-                        res.status(409);
-                        res.json({error: "The getOne method failed"}).end();
+                        res.status(500);
+                        res.json({message: "The getOne method failed"}).end();
                     }
                     });
 
@@ -41,8 +41,8 @@ class UserRouter {
                         res.status(201);
                         res.json(result);
                     } catch(err){
-                        res.status(409);
-                        res.json({error: `The addUser method failed --> ${err}`});
+                        res.status(500);
+                        res.json({message: `The addUser method failed --> ${err}`});
                     }
                 });
 
@@ -58,7 +58,7 @@ class UserRouter {
                         }
 
                     } catch (err) {
-                        error(err, res);
+			res.status(500).json(err).end();
                     }
                 });
 
@@ -68,13 +68,13 @@ class UserRouter {
                         const result = await UserController.deleteUserById(id) ;
 
                         if(result){
-                            return res.json({message : 'Success'}) ;
+                            return res.status(204) ;
                         }
                         else{
-                            return res.status(409).json({message : 'delete failed ' + result}) ;
+                            return res.status(404);
                         }
                     }
-                    return res.status(409).json({message : 'delete failed , ' + req.params.id + 'is not a number ' }) ;
+                    return res.status(500).json({message : 'delete failed , ' + req.params.id + 'is not a number ' }) ;
                 });
         }
 }

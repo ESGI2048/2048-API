@@ -1,47 +1,51 @@
 'use strict';
 
-const componentdbHandler = require('../models').Component;
+const eventdbHandler = require('../models').Event;
 
-class ComponentController {
+class EventController {
         async getAll() {
-                return componentdbHandler.findAll();
+                return eventdbHandler.findAll();
         }
 
         async getOne(id){
-                return componentdbHandler.findOne({
+                return eventdbHandler.findOne({
                         where : {
                                 id : id
                         }
                 }) ;
         }
 
-        async addComponent(name, type, file_path, value){
-                return componentdbHandler.create({
+        async addEvent(name, place, date, file_path, description){
+                return eventdbHandler.create({
                         name : name,
-                        type : type,
+                        place : place,
+			date : date,
                         file_path : file_path,
-                        value : value
+                        description : description
                 });
         }
 
-        async updateComponent(id, newData) {
-                return componentdbHandler.update(newData, {
+        async updateEvent(id, newData) {
+                return eventdbHandler.update(newData, {
                         where: {
                                 id: id
                         }
                 });
         }
 
-        prepareUpdate(name, type, value){
+        prepareUpdate(name, place, date, description){
                 let res = {};
                 if(name !== undefined){
                         res.name = name;
                 }
-                if(type !== undefined){
-                        res.type = type;
+                if(place !== undefined){
+                        res.place = place;
                 }
-                if(value !== undefined){
-                        res.value = value;
+		if(date !== undefined) {
+			res.date = date;
+		}
+                if(description !== undefined){
+                        res.description = description;
                 }
                 return res;
         }
@@ -54,8 +58,8 @@ class ComponentController {
 		return res;
 	}
 
-        async deleteComponentById(id) {
-                return componentdbHandler.destroy({
+        async deleteEventById(id) {
+                return eventdbHandler.destroy({
                         where: {
                                 id: id
                         },
@@ -64,4 +68,4 @@ class ComponentController {
         }
 }
 
-module.exports = new ComponentController();
+module.exports = new EventController();
