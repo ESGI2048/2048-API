@@ -16,8 +16,8 @@ class UserController {
 
 	async addUser(first_name, last_name, login, password, email, score, phone){
 		return userdbHandler.create({
-			firstName : first_name,
-			lastName : last_name,
+			first_name : first_name,
+			last_name : last_name,
 			login : login,
 			password : password,
 			email : email,
@@ -37,10 +37,10 @@ class UserController {
 	prepareUpdate( first_name, last_name, login, password, email, score, phone){
 		let res = {};
 		if(first_name !== undefined){
-			res.firstName = first_name;
+			res.first_name = first_name;
 		}
 		if(last_name !== undefined){
-			res.lastName = last_name;
+			res.last_name = last_name;
 		}
 		if(login !== undefined){
 			res.login = login;

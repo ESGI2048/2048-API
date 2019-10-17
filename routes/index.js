@@ -9,10 +9,11 @@ const EventRouter = router.EventRouter;
 const CodeRouter = router.CodeRouter;
 const UserRouter = router.UserRouter;
 const AuthenticationRouter = router.AuthenticationRouter;
+const ResourceRouter = router.ResourceRouter;
 
 class RouterBuilder {
 	constructor() {
-		this.listRoutes = ["notification", "component", "event", "code", "authentication", "user"];
+		this.listRoutes = ["notification", "component", "event", "code", "authentication", "user", "resource"];
 	}
 
 	generateRoutes(app) {
@@ -28,6 +29,7 @@ class RouterBuilder {
 	routerTemplate(routeToLoad) {
 		const router = express.Router();
 		router.use(bodyParser.json());
+		router.use(bodyParser.urlencoded({ extended: true }));
 
 		if(routeToLoad == 'notification') {
 			const notificationRoutes = new NotificationRouter();
@@ -48,11 +50,16 @@ class RouterBuilder {
 		}else if(routeToLoad == 'user') {
 			const userRoutes = new UserRouter();
 			userRoutes.setRoutes(router);
+		
+		}else if(routeToLoad == 'authentication') {
+			const authenticationRoutes = new AuthenticationRouter();
+			authenticationRoutes.setRoutes(router);
+		
+		}else if(routeToLoad == 'resource') {
+			const resourceRoutes = new ResourceRouter();
+			resourceRoutes.setRoutes(router);
+					
 		}
-		else if(routeToLoad == 'authentication') {
-		const userRoutes = new AuthenticationRouter();
-		userRoutes.setRoutes(router);
-}
 
 
 		
