@@ -7,30 +7,34 @@ class CodeRouter {
                 router.get('/', async (req, res) => {
                     try {
                         const result = await CodeController.getAll();
-                        if(result == null) {
-                                res.status(204).end();
+                        if(result == null || result == undefined || result.length == 0) {
+                                res.status(404);
+                                res.json("There is no reward codes in the database");
+                                res.end();
                         }else {
                                 res.status(200);
                                 res.json(result).end();
                         }
                     }catch(err) {
-                        res.status(409);
-                        res.json({error: "The getAll method failed"}).end();
+                        res.status(500);
+                        res.json({error: "Internal error"}).end();
                     }
                 });
 
                 router.get('/:id', async (req, res) => {
                     try {
                         const result = await CodeController.getOne(req.params.id);
-                        if(result == null) {
-                                res.status(204).end();
+                        if(result == null || result == undefined || result.length == 0) {
+                            res.status(404);
+                            res.json({error:"There is no reward codes in the database"});
+                            res.end();
                         }else {
-                                res.status(200);
-                                res.json(result).end();
+                            res.status(200);
+                            res.json(result).end();
                         }
                     }catch(err) {
-                        res.status(409);
-                        res.json({error: "The getOne method failed"}).end();
+                        res.status(500);
+                        res.json({error: "Internal error"}).end();
                     }
                     });
 
@@ -41,7 +45,7 @@ class CodeRouter {
                         res.json(result);
                     } catch(err){
                         res.status(409);
-                        res.json({error: `The addCode failed --> ${err}`});
+                        res.json({error: `Not possible to add this code because : ${err}`});
                     }
                 });
 
@@ -49,33 +53,58 @@ class CodeRouter {
                     try {
                         const id = parseInt(req.params.id, 10);
                         if (typeof id === 'number' && !isNaN(id)) {
-
                             const newData = await  CodeController.prepareUpdate(req.body.code, req.body.creation_date, req.body.expiration_date, req.body.description);
                             const result = await CodeController.updateCode(req.params.id, newData);
-                            res.status(200);
-                            res.json(result);
+                            if(result[0] === 1){
+                                res.status(204);
+                                res.end();
+                            }
+                            else{
+                                res.status(404);
+                                res.json({error : "The requested code does not exist"});
+                                res.end();
+                            }
                         }
+                        else {
+                            res.status(409);
+                            res.json({error : "The id is not a number"});
+                            res.end();
 
+                        }
                     } catch (err) {
-                        error(err, res);
+                        res.status(500);
+                        res.json({error : "Internal error"});
+                        res.end();
                     }
                 });
 
                 router.delete('/:id', async (req, res) => {
-                    const id = parseInt(req.params.id, 10) ;
-                    if(typeof id === 'number' && !isNaN(id) ){
-                        const result = await CodeController.deleteCodeById(id) ;
-
-                        if(result){
-                            return res.json({message : 'Success'}) ;
+                    try {
+                        const id = parseInt(req.params.id, 10) ;
+                        if(typeof id === 'number' && !isNaN(id) ) {
+                            const result = await CodeController.deleteCodeById(id);
+                            console.log(result);
+                            if (result === 1) {
+                                res.status(204);
+                                res.end();
+                            } else {
+                                res.status(404);
+                                res.json({error: "The requested code does not exist"});
+                                res.end();
+                            }
                         }
-                        else{
-                            return res.status(409).json({message : 'delete failed ' + result}) ;
+                        else {
+                            res.status(409);
+                            res.json({error : "The id is not a number"});
+                            res.end();
                         }
                     }
-                    return res.status(409).json({message : 'delete failed , ' + req.params.id + 'is not a number ' }) ;
+                    catch (err) {
+                        res.status(500);
+                        res.json({error : "Internal error"});
+                        res.end();
+                    }
                 });
-
         }
 }
 
