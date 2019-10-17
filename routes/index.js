@@ -8,7 +8,6 @@ const ComponentRouter = router.ComponentRouter;
 const EventRouter = router.EventRouter;
 const CodeRouter = router.CodeRouter;
 const UserRouter = router.UserRouter;
-const AuthenticationRouter = router.AuthenticationRouter;
 const SignUpRouter = router.SignUpRouter;
 const LoginRouter = router.LoginRouter;
 const LogoutRouter = router.LogoutRouter;
@@ -54,10 +53,6 @@ class RouterBuilder {
 			const userRoutes = new UserRouter();
 			userRoutes.setRoutes(router);
 		
-		}else if(routeToLoad == 'authentication') {
-			const authenticationRoutes = new AuthenticationRouter();
-			authenticationRoutes.setRoutes(router);
-		
 		}else if(routeToLoad == 'resource') {
 			const resourceRoutes = new ResourceRouter();
 			resourceRoutes.setRoutes(router);
@@ -74,10 +69,6 @@ class RouterBuilder {
 			const logoutRouter = new LogoutRouter();
 			logoutRouter.setRoutes(router);
 		}
-
-
-		
-
 		return router;
 	}
 }
