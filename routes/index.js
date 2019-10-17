@@ -11,11 +11,12 @@ const UserRouter = router.UserRouter;
 const AuthenticationRouter = router.AuthenticationRouter;
 const SignUpRouter = router.SignUpRouter;
 const LoginRouter = router.LoginRouter;
+const LogoutRouter = router.LogoutRouter;
 
 
 class RouterBuilder {
 	constructor() {
-		this.listRoutes = ["notification", "component", "event", "code", "authentication", "user", "login", "signup"];
+		this.listRoutes = ["notification", "component", "event", "code", "authentication", "user", "login", "signup", "logout"];
 	}
 
 	generateRoutes(app, passport) {
@@ -63,6 +64,10 @@ class RouterBuilder {
 		else if(routeToLoad == 'login') {
 			const loginRouter = new LoginRouter();
 			loginRouter.setRoutes(router, passport);
+		}
+		else if(routeToLoad == 'logout') {
+			const logoutRouter = new LogoutRouter();
+			logoutRouter.setRoutes(router);
 		}
 
 
