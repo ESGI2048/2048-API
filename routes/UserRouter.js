@@ -46,7 +46,7 @@ class UserRouter {
                     }
                 });
 
-                router.put('/:id', async (req, res) => {
+                router.put('/:id', authMiddleware.verifyBasicAuth, async (req, res) => {
                     try {
                         const id = parseInt(req.params.id, 10);
                         if (typeof id === 'number' && !isNaN(id)) {

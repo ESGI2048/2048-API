@@ -5,7 +5,7 @@ const fileUpload = require('express-fileupload');
 const FileHandler = require('../utils').FileHandler;
 const SHA256 = require("crypto-js/sha256");
 
-const authMiddleware = require('../middlewares/AdminAuth.js')
+const adminAuthMiddleware = require('../middlewares/AdminAuth.js');
 
 class ComponentRouter {
 	constructor() {
@@ -46,7 +46,7 @@ class ComponentRouter {
                     }
                     });
 
-                router.post('/', authMiddleware.verifyBasicAuth, async (req, res) => {
+                router.post('/', adminAuthMiddleware.verifyBasicAuth, async (req, res) => {
                     try{
                         const extension = req.files.file.name.substring(req.files.file.name.lastIndexOf('.'));
                         const filename = SHA256(Math.floor(Date.now()).toString()) + extension;
@@ -61,7 +61,7 @@ class ComponentRouter {
                 });
 
 
-                router.put('/:id', authMiddleware.verifyBasicAuth, async (req, res, next) => {
+                router.put('/:id', adminAuthMiddleware.verifyBasicAuth, async (req, res, next) => {
                     try {
                         const id = parseInt(req.params.id, 10);
                         if (typeof id === 'number' && !isNaN(id)) {
@@ -95,7 +95,7 @@ class ComponentRouter {
                     }
                 });
 
-                router.delete('/:id', authMiddleware.verifyBasicAuth, async (req, res, next) => {
+                router.delete('/:id', adminAuthMiddleware.verifyBasicAuth, async (req, res, next) => {
                     const id = parseInt(req.params.id, 10) ;
                     if(typeof id === 'number' && !isNaN(id) ){
 			try {

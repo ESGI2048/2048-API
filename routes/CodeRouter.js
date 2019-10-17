@@ -1,11 +1,12 @@
 'use strict';
 
 const CodeController = require('../controllers').CodeController;
-const authMiddleware = require('../middlewares/AdminAuth.js');
+const adminAuthMiddleware = require('../middlewares/AdminAuth.js');
+const authMiddleware = require('../middlewares/Auth.js');
 
 class CodeRouter {
         setRoutes(router, passport) {
-                router.get('/', authMiddleware.verifyBasicAuth, async (req, res) => {
+                router.get('/', authMiddleware.verifyAuth, async (req, res) => {
                     try {
                         const result = await CodeController.getAll();
                         if(result == null || result == undefined || result.length == 0) {
@@ -22,7 +23,7 @@ class CodeRouter {
                     }
                 });
 
-                router.get('/:id', async (req, res) => {
+                router.get('/:id', adminAuthMiddleware.verifyBasicAuth, async (req, res) => {
                     try {
                         const result = await CodeController.getOne(req.params.id);
                         if(result == null || result == undefined || result.length == 0) {
@@ -39,7 +40,7 @@ class CodeRouter {
                     }
                     });
 
-                router.post('/',
+                router.post('/', authMiddleware.verifyAuth,
                     async(req, res) => {
                     try{
                         const result = await CodeController.addCode(req.body.code, req.body.creation_date, req.body.expiration_date, req.body.description) ;
@@ -51,7 +52,7 @@ class CodeRouter {
                     }
                 });
 
-                router.put('/:id', async (req, res) => {
+                router.put('/:id', adminAuthMiddleware.verifyBasicAuth, async (req, res) => {
                     try {
                         const id = parseInt(req.params.id, 10);
                         if (typeof id === 'number' && !isNaN(id)) {
@@ -80,7 +81,7 @@ class CodeRouter {
                     }
                 });
 
-                router.delete('/:id', async (req, res) => {
+                router.delete('/:id', adminAuthMiddleware.verifyBasicAuth, async (req, res) => {
                     try {
                         const id = parseInt(req.params.id, 10) ;
                         if(typeof id === 'number' && !isNaN(id) ) {

@@ -39,23 +39,6 @@ app.use(flash()) ; // passport use flash message for error or success
 app.use(passport.initialize());
 app.use(passport.session());
 
-const ignoredRoutes = ["/user", "/event", "/component", "/code", "/login/admin", "/login", "/signup"];
-
-
-
-app.use((req, res, next)=>{
-
-    const login = localStorage.getItem('login') ;
-
-    if (!ignoredRoutes.includes(req.originalUrl) && !req.user && login == null ){
-        return res.sendStatus(403) ;
-    }
-
-    next() ;
-}) ;
-
-
-
 router.generateRoutes(app, passport);
 
 

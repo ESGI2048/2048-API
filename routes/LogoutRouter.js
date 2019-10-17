@@ -1,17 +1,13 @@
 'use strict' ;
 
 
-const express = require('express');
-const bodyParser = require('body-parser');
-const router = express.Router() ;
-const localstorage = require('localStorage') ;
-const userController = require('../controllers').UserController ;
-
-router.use(bodyParser.json()) ;
+const localstorage = require('localStorage');
+const userController = require('../controllers').UserController;
+const authMiddleware = require('../middlewares/Auth.js');
 
 class LogoutRouter {
     setRoutes(router) {
-        router.post('/', async (req, res) => {
+        router.post('/', authMiddleware.verifyAuth, async (req, res) => {
             try {
                 if (req.user) {
                     const login = req.user.login;
