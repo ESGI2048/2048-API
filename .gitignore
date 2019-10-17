@@ -2,5 +2,6 @@ node_modules/
 package-lock.json
 .env
 .idea/
-logs/*.log
+*.log
 resources/*
+.vagrant/
