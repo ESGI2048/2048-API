@@ -106,7 +106,7 @@ class EventRouter {
                                 }
 
                                 else{
-                                        res.status(404);
+                                        res.sendStatus(404);
                                 }
                         }catch(err) {
                                 res.status(500);
