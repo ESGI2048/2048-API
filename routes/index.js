@@ -8,7 +8,6 @@ const ComponentRouter = router.ComponentRouter;
 const EventRouter = router.EventRouter;
 const CodeRouter = router.CodeRouter;
 const UserRouter = router.UserRouter;
-const AuthenticationRouter = router.AuthenticationRouter;
 const SignUpRouter = router.SignUpRouter;
 const LoginRouter = router.LoginRouter;
 const LogoutRouter = router.LogoutRouter;
@@ -16,7 +15,7 @@ const LogoutRouter = router.LogoutRouter;
 
 class RouterBuilder {
 	constructor() {
-		this.listRoutes = ["notification", "component", "event", "code", "authentication", "user", "login", "signup", "logout"];
+		this.listRoutes = ["notification", "component", "event", "code", "user", "login", "signup", "logout"];
 	}
 
 	generateRoutes(app, passport) {
@@ -51,10 +50,6 @@ class RouterBuilder {
 
 		}else if(routeToLoad == 'user') {
 			const userRoutes = new UserRouter();
-			userRoutes.setRoutes(router);
-		}
-		else if(routeToLoad == 'authentication') {
-			const userRoutes = new AuthenticationRouter();
 			userRoutes.setRoutes(router);
 		}
 		else if(routeToLoad == 'signup') {
