@@ -9,13 +9,11 @@ class LoginRouter{
             //successRedirect: '/',
             failureFlash: true,
             successFlash: 'authentication API succeeded !'
-        }), (req, res) =>{
+        }), (req, res, next) =>{
                 res.status(200);
                 res.json({Authenticated : true});
                 res.end();
-            }
-
-        );
+            });
 
         router.get('/admin', authMiddleware.verifyBasicAuth, (req, res, next) => {
             res.sendStatus(204);

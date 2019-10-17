@@ -1,10 +1,11 @@
 'use strict';
 
 const CodeController = require('../controllers').CodeController;
+const authMiddleware = require('../middlewares/AdminAuth.js');
 
 class CodeRouter {
-        setRoutes(router) {
-                router.get('/', async (req, res) => {
+        setRoutes(router, passport) {
+                router.get('/', authMiddleware.verifyBasicAuth, async (req, res) => {
                     try {
                         const result = await CodeController.getAll();
                         if(result == null || result == undefined || result.length == 0) {
@@ -38,7 +39,8 @@ class CodeRouter {
                     }
                     });
 
-                router.post('/', async(req, res) => {
+                router.post('/',
+                    async(req, res) => {
                     try{
                         const result = await CodeController.addCode(req.body.code, req.body.creation_date, req.body.expiration_date, req.body.description) ;
                         res.status(201);

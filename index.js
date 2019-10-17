@@ -40,18 +40,26 @@ app.use(flash()) ; // passport use flash message for error or success
 app.use(passport.initialize());
 app.use(passport.session());
 
+const ignoredRoutes = ["/user", "/event", "/component", "/code", "/login/admin", "/login", "/signup"];
+
 
 
 app.use((req, res, next)=>{
 
     const login = localStorage.getItem('login') ;
+    console.log(req.user);
+    console.log(login);
 
-    if(req.originalUrl != '/signup' && req.originalUrl != '/login'  && !req.user && login == null ){
+    if (!ignoredRoutes.includes(req.originalUrl) && !req.user && login == null ){
+        return res.sendStatus(403) ;
+    }
+
+    /*if(req.originalUrl != '/signup' && req.originalUrl != '/login'  && !req.user && login == null ){
         return res.status(401).send({error : 'your are not authorized to go in  : ' + req.originalUrl, test : 'test', user : req.user}).end() ;
     }
     else if(req.originalUrl == '/login' && req.user){
         return res.redirect('/') ;
-    }
+    }*/
 
     next() ;
 }) ;

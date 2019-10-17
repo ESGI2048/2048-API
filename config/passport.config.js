@@ -4,7 +4,7 @@ const passport = require('passport/lib') ;
 const LocalStrategy = require('passport-local').Strategy;
 
 const authenticationController = require('../controllers').AuthenticationController ;
-const userContriller = require('../controllers').UserController;
+const userController = require('../controllers').UserController;
 
 
 passport.use(new LocalStrategy(
@@ -39,7 +39,7 @@ passport.serializeUser(function(user, done) {
 
 passport.deserializeUser(async function(id, done) {
     try{
-        const user = await userContriller.getOne(id);
+        const user = await userController.getOne(id);
         return  done(null, user);
     }catch(err){
         console.err(err) ;

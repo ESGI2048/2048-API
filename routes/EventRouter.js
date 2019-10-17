@@ -1,6 +1,6 @@
 'use strict' ;
 
-const authMiddleware = require('../middlewares/AdminAuth.js')
+const authMiddleware = require('../middlewares/AdminAuth.js');
 
 class EventRouter {
         setRoutes(router) {

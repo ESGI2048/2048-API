@@ -47,7 +47,7 @@ class RouterBuilder {
 
 		}else if(routeToLoad == 'code') {
 			const codeRoutes = new CodeRouter();
-			codeRoutes.setRoutes(router);
+			codeRoutes.setRoutes(router, passport);
 
 		}else if(routeToLoad == 'user') {
 			const userRoutes = new UserRouter();

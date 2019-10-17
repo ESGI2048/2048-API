@@ -1,10 +1,11 @@
 'use strict';
 const controllers = require('../controllers');
 const UserController = controllers.UserController;
+const authMiddleware = require('../middlewares/AdminAuth.js');
 
 class UserRouter {
         setRoutes(router) {
-                router.get('/', async (req, res) => {
+                router.get('/', authMiddleware.verifyBasicAuth, async (req, res) => {
                     try {
                         const result = await UserController.getAll();
 			if(result == null) {
@@ -19,7 +20,7 @@ class UserRouter {
                     }
                 });
 
-                router.get('/:id', async (req, res) => {
+                router.get('/:id', authMiddleware.verifyBasicAuth, async (req, res) => {
                     try {
                         const result = await UserController.getOne(req.params.id);
 			if(result == null) {
@@ -34,7 +35,7 @@ class UserRouter {
                     }
                     });
 
-                router.post('/', async(req, res) => {
+                router.post('/', authMiddleware.verifyBasicAuth, async(req, res) => {
                     try{
                         const result = await UserController.addUser(req.body.first_name, req.body.last_name, req.body.login, req.body.password, req.body.email, req.body.score, req.body.phone) ;
                         res.status(201);
@@ -61,7 +62,7 @@ class UserRouter {
                     }
                 });
 
-                router.delete('/:id', async (req, res) => {
+                router.delete('/:id', authMiddleware.verifyBasicAuth, async (req, res) => {
                     const id = parseInt(req.params.id, 10) ;
                     if(typeof id === 'number' && !isNaN(id) ){
                         const result = await UserController.deleteUserById(id) ;
