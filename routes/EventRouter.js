@@ -103,7 +103,7 @@ class EventRouter {
                                 const result = await EventController.deleteEventById(id);
                                 if(result){
                                         this.fileHandler.deleteFile(dataToDelete.file_path);
-                                        res.status(204) ;
+                                        res.sendStatus(204);
                                 }
 
                                 else{
