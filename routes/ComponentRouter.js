@@ -47,7 +47,9 @@ class ComponentRouter {
 
                 router.post('/', authMiddleware.verifyBasicAuth, async (req, res, next) => {
                     try{
-			const result = await ComponentController.addComponent(req.body.name, req.body.type, SHA256(Date.now()).toString(), req.body.value);
+			const extension = req.files.file.name.substring(req.files.file.name.lastIndexOf('.')); 
+			const filename = SHA256(Date.now()).toString() + extension;
+			const result = await ComponentController.addComponent(req.body.name, req.body.type, filename, req.body.value);
 			this.fileHandler.uploadFile(req, res, result.file_path);
                         res.status(201);
                         res.json(result).end();
@@ -68,9 +70,21 @@ class ComponentRouter {
                         	}
                             	const newData = await  ComponentController.prepareUpdate(req.body.name, req.body.type, req.body.value);
                             	const result = await ComponentController.updateComponent(req.params.id, newData);
-				this.fileHandler.uploadFile(req, res, dataToUpdate.file_path);
-                            	res.status(200);
-                            	res.json(result);
+				if(result) {
+					if(req.files != undefined || req.files != null) {
+						this.fileHandler.deleteFile(dataToUpdate.file_path);
+						const extension = req.files.file.name.substring(req.files.file.name.lastIndexOf('.'));
+                        			const filename = SHA256(Date.now()).toString() + extension;
+						this.fileHandler.uploadFile(req, res, filename);
+						const newData2 = await  ComponentController.prepareFilePath(filename);
+                                		const result2 = await ComponentController.updateComponent(req.params.id, newData2);
+
+					}
+                            		res.status(204).end();
+
+				}else {
+					throw new err();
+				}
                         }
 
                     } catch (err) {
@@ -84,9 +98,10 @@ class ComponentRouter {
                     const id = parseInt(req.params.id, 10) ;
                     if(typeof id === 'number' && !isNaN(id) ){
 			try {
+				const dataToDelete = await ComponentController.getOne(req.params.id);
 				const result = await ComponentController.deleteComponentById(id);
                         	if(result){
-					this.fileHandler.deleteFile(dataToDelete.dataValues.file_path);			
+					this.fileHandler.deleteFile(dataToDelete.file_path);			
                             		res.status(200).json({message: 'Success'}) ;
                         	}
 
@@ -99,9 +114,10 @@ class ComponentRouter {
 
 			}	
 
+                    }else {
+                    	return res.status(409).json({message : 'delete failed , ' + req.params.id + 'is not a number ' }) ;
                     }
-                    return res.status(409).json({message : 'delete failed , ' + req.params.id + 'is not a number ' }) ;
-                });
+		});
         }
 
 }

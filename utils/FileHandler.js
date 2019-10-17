@@ -24,7 +24,7 @@ class FileHandler {
 	deleteFile(filename) {
 		fs.unlink(path.join(this.path, filename), (err) => {
 			if(err) {
-				throw new err({message: `The file cannot be delete --> ${err}`});
+				console.log(`The file cannot be delete --> ${err}`);
 			}
 		});
 	}

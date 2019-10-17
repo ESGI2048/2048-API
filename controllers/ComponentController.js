@@ -46,6 +46,14 @@ class ComponentController {
                 return res;
         }
 
+	prepareFilePath(file_path) {
+		let res = {};
+		if(file_path !== undefined) {
+			res.file_path = file_path;
+		}
+		return res;
+	}
+
         async deleteComponentById(id) {
                 return componentdbHandler.destroy({
                         where: {
