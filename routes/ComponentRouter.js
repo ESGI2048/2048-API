@@ -2,11 +2,12 @@
 
 const ComponentController = require('../controllers').ComponentController;
 const fileUpload = require('express-fileupload');
-const path = require('path');
+const FileHandler = require('../utils').FileHandler;
+const SHA256 = require("crypto-js/sha256");
 
 class ComponentRouter {
 	constructor() {
-		this.path = path.join(__dirname, '../resources');
+		this.fileHandler = new FileHandler();
 	}
 
 	setRoutes(router) {
@@ -22,7 +23,7 @@ class ComponentRouter {
                                 res.json(result).end();
                         }
                     }catch(err) {
-                        res.status(409);
+                        res.status(400);
                         res.json({error: "The getAll method failed"}).end();
                     }
                 });
@@ -37,32 +38,19 @@ class ComponentRouter {
                                 res.json(result).end();
                         }
                     }catch(err) {
-                        res.status(409);
+                        res.status(400);
                         res.json({error: "The getOne method failed"}).end();
                     }
                     });
 
                 router.post('/', async(req, res) => {
-		        if (!req.files || Object.keys(req.files).length === 0) {
-                                return res.status(400).json({error: 'No files were uploaded'}).end();
-                        }
-                        if(Object.keys(req.files).length > 1) {
-                                return res.status(400).json({error: "Only one file can be send"}).end();
-                        }
-                        const resourceFile = req.files.file;
-
-
                     try{
-			const result = await ComponentController.addComponent(req.body.name, req.body.type, resourceFile.name, req.body.value) ;
-                        resourceFile.mv(path.join(this.path, resourceFile.name), (err) => {
-                                if(err) {
-                                        return res.status(500).json(err).end();
-                                }
-                        });
+			const result = await ComponentController.addComponent(req.body.name, req.body.type, SHA256(Date.now()).toString(), req.body.value);
+			this.fileHandler.uploadFile(req, res, result.file_path);
                         res.status(201);
                         res.json(result).end();
                     } catch(err){
-                        res.status(409);
+                        res.status(400);
                         res.json({error: `The addComponent method failed --> ${err}`}).end();
                     }
                 });
@@ -71,29 +59,43 @@ class ComponentRouter {
                     try {
                         const id = parseInt(req.params.id, 10);
                         if (typeof id === 'number' && !isNaN(id)) {
-
-                            const newData = await  ComponentController.prepareUpdate();
-                            const result = await ComponentController.updateComponent(req.params.id, newData);
-                            res.status(200);
-                            res.json(result);
+				const dataToUpdate = await ComponentController.getOne(req.params.id);
+                        	if(dataToUpdate == null) {
+                        		return res.status(204).json({message: "No data for this id"}).end();
+                        	}
+                            	const newData = await  ComponentController.prepareUpdate(req.body.name, req.body.type, req.body.value);
+                            	const result = await ComponentController.updateComponent(req.params.id, newData);
+				this.fileHandler.uploadFile(req, res, dataToUpdate.file_path);
+                            	res.status(200);
+                            	res.json(result);
                         }
 
                     } catch (err) {
-                        error(err, res);
+			res.status(400);
+			res.json({error: `The put method failed --> ${err}`}).end();
+
                     }
                 });
 
                 router.delete('/:id', async (req, res) => {
                     const id = parseInt(req.params.id, 10) ;
                     if(typeof id === 'number' && !isNaN(id) ){
-                        const result = await ComponentController.deleteComponentById(id) ;
+			try {
+				const result = await ComponentController.deleteComponentById(id);
+                        	if(result){
+					this.fileHandler.deleteFile(dataToDelete.dataValues.file_path);			
+                            		res.status(200).json({message: 'Success'}) ;
+                        	}
 
-                        if(result){
-                            return res.json({message : 'Success'}) ;
-                        }
-                        else{
-                            return res.status(409).json({message : 'delete failed ' + result}) ;
-                        }
+                        	else{
+                            		res.status(400).json({message: 'delete failed ' + result}) ;
+                        	}
+			}catch(err) {
+				res.status(400);
+                        	res.json({error: `The delete method failed --> ${err}`}).end();
+
+			}	
+
                     }
                     return res.status(409).json({message : 'delete failed , ' + req.params.id + 'is not a number ' }) ;
                 });

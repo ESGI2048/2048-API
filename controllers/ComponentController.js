@@ -32,16 +32,13 @@ class ComponentController {
                 });
         }
 
-        prepareUpdate(name, type, file_path, value){
+        prepareUpdate(name, type, value){
                 let res = {};
                 if(name !== undefined){
                         res.name = name;
                 }
                 if(type !== undefined){
                         res.type = type;
-                }
-                if(file_path !== undefined){
-                        res.file_path = file_path;
                 }
                 if(value !== undefined){
                         res.value = value;
