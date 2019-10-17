@@ -8,6 +8,6 @@ module.exports = {
 	UserRouter: require('./UserRouter.js'),
 	SignUpRouter: require('./SignUpRouter.js'),
 	LoginRouter: require('./LoginRouter.js'),
-	LogoutRouter: require('./LogoutRouter')
-	
+	LogoutRouter: require('./LogoutRouter'),
+	ResourceRouter: require('./ResourceRouter.js')
 };

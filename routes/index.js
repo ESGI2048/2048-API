@@ -11,11 +11,13 @@ const UserRouter = router.UserRouter;
 const SignUpRouter = router.SignUpRouter;
 const LoginRouter = router.LoginRouter;
 const LogoutRouter = router.LogoutRouter;
+const ResourceRouter = router.ResourceRouter;
+
 
 
 class RouterBuilder {
 	constructor() {
-		this.listRoutes = ["notification", "component", "event", "code", "user", "login", "signup", "logout"];
+		this.listRoutes = ["notification", "component", "event", "code", "user", "login", "signup", "logout", "resource"];
 	}
 
 	generateRoutes(app, passport) {
@@ -24,13 +26,14 @@ class RouterBuilder {
 		}); 
 		app.all('*', (req, res, next) => {
 			res.status(404);
-			res.json({message: "Page note found"});
+			res.json({message: "Page not found"});
 		});
 	}
 
 	routerTemplate(routeToLoad, passport) {
 		const router = express.Router();
 		router.use(bodyParser.json());
+		router.use(bodyParser.urlencoded({ extended: true }));
 
 		if(routeToLoad == 'notification') {
 			const notificationRoutes = new NotificationRouter();
@@ -51,6 +54,10 @@ class RouterBuilder {
 		}else if(routeToLoad == 'user') {
 			const userRoutes = new UserRouter();
 			userRoutes.setRoutes(router);
+		
+		}else if(routeToLoad == 'resource') {
+			const resourceRoutes = new ResourceRouter();
+			resourceRoutes.setRoutes(router);
 		}
 		else if(routeToLoad == 'signup') {
 			const signupRoutes = new SignUpRouter();
@@ -64,10 +71,6 @@ class RouterBuilder {
 			const logoutRouter = new LogoutRouter();
 			logoutRouter.setRoutes(router);
 		}
-
-
-		
-
 		return router;
 	}
 }
