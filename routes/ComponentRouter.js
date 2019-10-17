@@ -13,42 +13,45 @@ class ComponentRouter {
 	}
 
 	setRoutes(router) {
-		router.use(fileUpload());		
-
+		router.use(fileUpload());
                 router.get('/', async (req, res) => {
                     try {
                         const result = await ComponentController.getAll();
-                        if(result == null || result.length === 0) {
-                                res.status(204).end();
+                        if(result == null || result == undefined || result.length == 0) {
+                            res.status(404);
+                            res.json("There is no component in the database");
+                            res.end();
                         }else {
-                                res.status(200);
-                                res.json(result).end();
+                            res.status(200);
+                            res.json(result).end();
                         }
                     }catch(err) {
-                        res.status(400);
-                        res.json({error: "The getAll method failed"}).end();
+                        res.status(500);
+                        res.json({error: "Internal error"}).end();
                     }
                 });
 
                 router.get('/:id', async (req, res) => {
                     try {
                         const result = await ComponentController.getOne(req.params.id);
-                        if(result == null) {
-                                res.status(204).end();
+                        if(result == null || result == undefined || result.length == 0) {
+                            res.status(404);
+                            res.json({error:"The component requested is not in the database"});
+                            res.end();
                         }else {
-                                res.status(200);
-                                res.json(result).end();
+                            res.status(200);
+                            res.json(result).end();
                         }
                     }catch(err) {
-                        res.status(400);
-                        res.json({error: "The getOne method failed"}).end();
+                        res.status(500);
+                        res.json({error: "Internal error"}).end();
                     }
                     });
 
-                router.post('/', authMiddleware.verifyBasicAuth, async (req, res, next) => {
+                router.post('/', authMiddleware.verifyBasicAuth, async (req, res) => {
                     try{
-			const result = await ComponentController.addComponent(req.body.name, req.body.type, SHA256(Date.now()).toString(), req.body.value);
-			this.fileHandler.uploadFile(req, res, result.file_path);
+			            const result = await ComponentController.addComponent(req.body.name, req.body.type, SHA256(Date.now()).toString(), req.body.value);
+			            this.fileHandler.uploadFile(req, res, result.file_path);
                         res.status(201);
                         res.json(result).end();
                     } catch(err){

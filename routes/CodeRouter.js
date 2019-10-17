@@ -26,7 +26,7 @@ class CodeRouter {
                         const result = await CodeController.getOne(req.params.id);
                         if(result == null || result == undefined || result.length == 0) {
                             res.status(404);
-                            res.json({error:"There is no reward codes in the database"});
+                            res.json({error:"The reward code requested is not in the database"});
                             res.end();
                         }else {
                             res.status(200);

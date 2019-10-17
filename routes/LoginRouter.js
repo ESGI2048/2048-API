@@ -1,8 +1,10 @@
 'use strict';
 
+const authMiddleware = require('../middlewares/AdminAuth.js');
 class LoginRouter{
 
     setRoutes(router, passport) {
+
         router.post('/', passport.authenticate('local', {
             //successRedirect: '/',
             failureFlash: true,
@@ -14,7 +16,12 @@ class LoginRouter{
             }
 
         );
+
+        router.get('/admin', authMiddleware.verifyBasicAuth, (req, res, next) => {
+            res.sendStatus(204);
+        });
     }
+
 }
 
 module.exports = LoginRouter ;
