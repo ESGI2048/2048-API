@@ -19,7 +19,7 @@ class ComponentRouter {
                     try {
                         const result = await ComponentController.getAll();
                         if(result == null || result.length === 0) {
-                                res.status(204).end();
+                                res.status(200).json([]).end();
                         }else {
                                 res.status(200);
                                 res.json(result).end();
@@ -34,13 +34,13 @@ class ComponentRouter {
                     try {
                         const result = await ComponentController.getOne(req.params.id);
                         if(result == null) {
-                                res.status(204).end();
+                                res.status(404).end();
                         }else {
                                 res.status(200);
                                 res.json(result).end();
                         }
                     }catch(err) {
-                        res.status(400);
+                        res.status(500);
                         res.json({error: "The getOne method failed"}).end();
                     }
                     });
@@ -54,7 +54,7 @@ class ComponentRouter {
                         res.status(201);
                         res.json(result).end();
                     } catch(err){
-                        res.status(400);
+                        res.status(500);
                         res.json({error: `The addComponent method failed --> ${err}`}).end();
                     }
                 });
@@ -66,7 +66,7 @@ class ComponentRouter {
                         if (typeof id === 'number' && !isNaN(id)) {
 				const dataToUpdate = await ComponentController.getOne(req.params.id);
                         	if(dataToUpdate == null) {
-                        		return res.status(204).json({message: "No data for this id"}).end();
+                        		return res.status(404).end();
                         	}
                             	const newData = await  ComponentController.prepareUpdate(req.body.name, req.body.type, req.body.value);
                             	const result = await ComponentController.updateComponent(req.params.id, newData);
@@ -88,7 +88,7 @@ class ComponentRouter {
                         }
 
                     } catch (err) {
-			res.status(400);
+			res.status(500);
 			res.json({error: `The put method failed --> ${err}`}).end();
 
                     }
@@ -106,10 +106,10 @@ class ComponentRouter {
                         	}
 
                         	else{
-                            		res.status(400).json({message: 'delete failed ' + result}) ;
+                            		res.sendStatus(404) ;
                         	}
 			}catch(err) {
-				res.status(400);
+				res.status(500);
                         	res.json({error: `The delete method failed --> ${err}`}).end();
 
 			}	

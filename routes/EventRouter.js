@@ -19,13 +19,13 @@ class EventRouter {
                     try {
                         const result = await EventController.getAll();
                         if(result == null || result.length === 0) {
-                                res.status(204).end();
+                                res.status(200).json([]).end();
                         }else {
                                 res.status(200);
                                 res.json(result).end();
                         }
                     }catch(err) {
-                        res.status(400);
+                        res.status(500);
                         res.json({error: "The getAll method failed"}).end();
                     }
                 });
@@ -34,13 +34,13 @@ class EventRouter {
                     try {
                         const result = await EventController.getOne(req.params.id);
                         if(result == null) {
-                                res.status(204).end();
+                                res.status(404).end();
                         }else {
                                 res.status(200);
                                 res.json(result).end();
                         }
                     }catch(err) {
-                        res.status(400);
+                        res.status(500);
                         res.json({error: "The getOne method failed"}).end();
                     }
                     });
@@ -54,7 +54,7 @@ class EventRouter {
                         res.status(201);
                         res.json(result).end();
                     } catch(err){
-                        res.status(400);
+                        res.status(500);
                         res.json({error: `The addEvent method failed --> ${err}`}).end();
                     }
                 });
@@ -88,7 +88,7 @@ class EventRouter {
                         }
 
                     } catch (err) {
-                        res.status(400);
+                        res.status(500);
                         res.json({error: `The put method failed --> ${err}`}).end();
 
                     }
@@ -102,14 +102,14 @@ class EventRouter {
                                 const result = await EventController.deleteEventById(id);
                                 if(result){
                                         this.fileHandler.deleteFile(dataToDelete.file_path);
-                                        res.status(200).json({message: 'Success'}) ;
+                                        res.status(204) ;
                                 }
 
                                 else{
-                                        res.status(400).json({message: 'delete failed ' + result}) ;
+                                        res.status(404);
                                 }
                         }catch(err) {
-                                res.status(400);
+                                res.status(500);
                                 res.json({error: `The delete method failed --> ${err}`}).end();
 
                         }
