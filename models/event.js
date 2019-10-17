@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
         name : {type : DataTypes.STRING, allowNull: false, unique: true },
         place : {type : DataTypes.STRING, allowNull: false},
         date : {type: DataTypes.DATE, allowNull : false} ,
-        filePath : {type: DataTypes.STRING, allowNull : false} ,
+        file_path : {type: DataTypes.STRING, allowNull : false} ,
         description : {type: DataTypes.STRING, allowNull : false, unique: true}
     },{
         tableName : 'Event',

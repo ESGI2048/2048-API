@@ -48,7 +48,7 @@ class ComponentRouter {
                 router.post('/', authMiddleware.verifyBasicAuth, async (req, res, next) => {
                     try{
 			const extension = req.files.file.name.substring(req.files.file.name.lastIndexOf('.')); 
-			const filename = SHA256(Date.now()).toString() + extension;
+			const filename = SHA256(Math.floor(Date.now()).toString()) + extension;
 			const result = await ComponentController.addComponent(req.body.name, req.body.type, filename, req.body.value);
 			this.fileHandler.uploadFile(req, res, result.file_path);
                         res.status(201);
@@ -74,7 +74,7 @@ class ComponentRouter {
 					if(req.files != undefined || req.files != null) {
 						this.fileHandler.deleteFile(dataToUpdate.file_path);
 						const extension = req.files.file.name.substring(req.files.file.name.lastIndexOf('.'));
-                        			const filename = SHA256(Date.now()).toString() + extension;
+						const filename = SHA256(Math.floor(Date.now()).toString()) + extension;
 						this.fileHandler.uploadFile(req, res, filename);
 						const newData2 = await  ComponentController.prepareFilePath(filename);
                                 		const result2 = await ComponentController.updateComponent(req.params.id, newData2);

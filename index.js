@@ -12,7 +12,6 @@ const router = new RouterBuilder();
 dotenv.config();
 
 const app = express();
-
 app.use(cors());
 
 router.generateRoutes(app);
