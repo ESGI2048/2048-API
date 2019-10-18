@@ -7,8 +7,8 @@ class LoginRouter{
 
         router.post('/', passport.authenticate('local', {
             //successRedirect: '/',
-            failureFlash: true,
-            successFlash: 'authentication API succeeded !'
+            //failureFlash: true,
+            //successFlash: 'authentication API succeeded !'
         }), (req, res, next) =>{
                 res.status(200);
                 res.json({Authenticated : true});

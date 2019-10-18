@@ -35,7 +35,7 @@ app.use(cookieParser());
 app.use(bodyParser());
 //app.use(bodyParser.raw({type : 'application/octet-stream'})) ;
 app.use(session({ secret: 'keyboard cat' , saveUninitialized: true, resave:true}));
-app.use(flash()) ; // passport use flash message for error or success
+//app.use(flash()) ; // passport use flash message for error or success
 app.use(passport.initialize());
 app.use(passport.session());
 

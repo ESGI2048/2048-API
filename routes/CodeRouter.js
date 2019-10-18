@@ -43,7 +43,7 @@ class CodeRouter {
                 router.post('/', authMiddleware.verifyAuth,
                     async(req, res) => {
                     try{
-                        const result = await CodeController.addCode(req.body.code, req.body.creation_date, req.body.expiration_date, req.body.description) ;
+                        const result = await CodeController.addCode(req.body.code, req.body.creation_date, req.body.expiration_date, req.body.score, req.body.reward) ;
                         res.status(201);
                         res.json(result);
                     } catch(err){
