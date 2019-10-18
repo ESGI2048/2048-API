@@ -21,16 +21,16 @@ class SignUpRouter {
                     if (result) {
                         res.json(result);
                     } else {
-                        res.status(409).json({error: 'signup Failed : ', body: req.body});
+                        res.status(400).json({error: 'signup Failed : ', body: req.body});
                     }
 
                 } else {
-                    res.status(409).json({error: 'signup Failed because of your bad informations', body: req.body});
+                    res.status(400).json({error: 'signup Failed because of your bad informations', body: req.body});
                 }
 
             } catch (err) {
                 console.error(err);
-                res.status(409).json({error: 'signup Failed', body: req.body});
+                res.status(500).json({error: 'signup Failed', body: req.body});
             }
         });
     }
